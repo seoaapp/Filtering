@@ -15,7 +15,7 @@ const markup = require('chalk')
 const express = require('express')
 
 /** Dialogflow Module */
-process.env.GOOGLE_APPLICATION_CREDENTIALS = '../lib/BadWordsFilter-e34ed9d4dd5b.json'
+process.env.GOOGLE_APPLICATION_CREDENTIALS = './lib/BadWordsFilter-e34ed9d4dd5b.json'
 const dialogflowId = 'badwordsfilter-esqgxe'
 const dialogflow = require('dialogflow')
 
