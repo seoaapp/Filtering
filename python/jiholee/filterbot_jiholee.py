@@ -10,7 +10,7 @@ bot = commands.Bot(prefix)
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(activity=discord.Activity(name="Filterbot 테스트중"))
+    await bot.change_presence(activity=discord.Activity(name="Filterbot 테스트중", type=1))
     print("Filterbot 작동!")
 
 
