@@ -1,10 +1,14 @@
 {
   "name": "filteringapi",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/index.js",
   "license": "MIT",
   "scripts": {
-    "start": "node index.js"
+    "start": "node ./src/index.js",
+    "build": "pkg ."
+  },
+  "bin": {
+    "app": "./src/index.js"
   },
   "dependencies": {
     "chalk": "^2.4.2",
@@ -13,5 +17,8 @@
     "hangul-js": "^0.2.5",
     "is-alphabetical": "^1.0.3",
     "nanoid": "^2.0.3"
+  },
+  "devDependencies": {
+    "pkg": "^4.4.0"
   }
 }
