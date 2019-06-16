@@ -7,6 +7,11 @@
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.17.1"
+    "chalk": "^2.4.2",
+    "dialogflow": "^0.10.1",
+    "express": "^4.17.1",
+    "hangul-js": "^0.2.5",
+    "is-alphabetical": "^1.0.3",
+    "nanoid": "^2.0.3"
   }
 }
