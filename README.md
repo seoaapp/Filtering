@@ -1,7 +1,12 @@
+|  | proj-Filtering Github Repository Shields |
+|:-----------------------:| ------------------------- |
+| Github Repository Info | [![GitHub license](https://img.shields.io/github/license/ttakkku/Filtering.svg?logo=Github&style=popout&logoColor=white)](https://github.com/ttakkku/Filtering/blob/%CE%BCBot-ver7/LICENSE) ![GitHub code size in bytes](https://img.shields.io/github/languages/code-size/ttakkku/Filtering.svg?logo=Github&style=popout&logoColor=white) ![GitHub (pre-)release](https://img.shields.io/github/release/ttakkku/Filtering/all.svg?logo=Github&style=popout&logoColor=white) ![Github All Releases](https://img.shields.io/github/downloads/ttakkku/Filtering/total.svg?logo=Github&style=popout&logoColor=white)[ ![GitHub forks](https://img.shields.io/github/forks/ttakkku/Filtering.svg?logo=Github&style=popout&logoColor=white)](https://github.com/ttakkku/Filtering/network)[ ![GitHub issues](https://img.shields.io/github/issues/ttakkku/Filtering.svg?logo=Github&style=popout&logoColor=white)](https://github.com/ttakkku/Filtering/issues) |
+| 
+
 # 필터링 프로젝트 공동 작업소
 > 주제: 입력된 문자열이 욕설이 포함 되어있는지, 아닌지 판별하여 욕설 여/부를 출력하는 프로그램을 작성하시오
 
-이 곳은 ttakkku [![GitHub followers](https://img.shields.io/github/followers/ttakkku.svg?label=Flollow&style=social)](https://github.com/ttakkku) 님이 시작하신 필터링 프로젝트의 구성원들이 공동으로 작업하는 공간입니다<br />
+이 곳은 [ttakkku](http://github.com/ttakkku) [![GitHub followers](https://img.shields.io/github/followers/ttakkku.svg?label=Follow&style=social)](https://github.com/ttakkku) 님이 시작하신 필터링 프로젝트의 구성원들이 공동으로 작업하는 공간입니다<br />
 필터링 프로젝트의 구성원들은 이 작업소에서 모듈을 만들거나 봇을 만들거나 에플리케이션을 만들거나 무엇을 하든 상관없습니다
 
 단,
@@ -14,10 +19,37 @@
 
 물론, 디버그나 git push도 자율로 하실 수 있습니다
 
+# 파일 구조화
+
+<!--
+
+
+Proj-Fitering -- License & Readme.md & .gitgnore 
+               |
+                - Private - Other
+               |
+                - Public 
+
+
+-->
+
+> Proj-Filtering
+>> javascript
+>>> PMH
+>>
+>> python
+>>> hynus
+>>
+>> public
+>>> img
+>>
+>> private
+
+
 # Collaborators
 
 [![Collaborators count](https://img.shields.io/github/contributors/ttakkku/Filtering)](https://github.com/ttakkku/Filtering/graphs/contributors)
 
 # Discord Support Guild
 
-[![Proj-Filtering](https://discordapp.com/api/guilds/586933011182911529/embed.png?style=banner2)](https://discord.gg/hwRgVYA)공동 작업소
+[![Proj-Filtering 공동 작업소](https://discordapp.com/api/guilds/586933011182911529/embed.png?style=banner2)](https://discord.gg/hwRgVYA)

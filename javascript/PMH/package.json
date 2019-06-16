@@ -1,9 +1,12 @@
 {
-  "name": "PMH",
+  "name": "filteringapi",
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "node index.js"
+  },
   "dependencies": {
-    "discord.js": "^11.5.1"
+    "express": "^4.17.1"
   }
 }
