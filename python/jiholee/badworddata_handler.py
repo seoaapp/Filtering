@@ -3,6 +3,10 @@ import os
 
 DIR = os.path.dirname(os.path.abspath(__file__)) 
 
+def get_token():
+    with open(DIR + "./token", 'r') as w:
+        return w.read()
+
 def save(badwords):
     with open(DIR + "./badword", 'wb') as w:
         pickle.dump(badwords, w)

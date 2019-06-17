@@ -2,7 +2,8 @@ import discord # rewrite
 from discord.ext import commands
 import badworddata_handler as BWH
 
-token = "NTg5ODEzODA2ODY0MDA3MTY5.XQZJXQ.nwMZy9u8TnW9yUP5Kx5x390sab0"
+
+token = BWH.get_token()
 
 prefix = "fb!"
 
