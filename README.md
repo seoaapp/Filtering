@@ -43,7 +43,7 @@ Proj-Fitering -- License & Readme.md & .gitgnore
 >> public
 >>> img
 >>
->> private
+
 
 
 # Collaborators
