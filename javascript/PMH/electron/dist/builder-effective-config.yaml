@@ -1,0 +1,10 @@
+directories:
+  output: dist
+  buildResources: build
+appId: kr.kro.pmhstudio.filtering
+win:
+  target:
+    - nsis
+    - portable
+  publisherName: PMH Studio / PMH
+electronVersion: 5.0.4

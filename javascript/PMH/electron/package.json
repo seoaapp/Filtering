@@ -1,0 +1,30 @@
+{
+  "name": "electron",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "build": "build --win --x64"
+  },
+  "dependencies": {
+    "dialogflow": "^0.10.1",
+    "hangul-js": "^0.2.5",
+    "is-alphabetical": "^1.0.3",
+    "nanoid": "^2.0.3"
+  },
+  "devDependencies": {
+    "electron": "^5.0.4",
+    "electron-builder": "^20.43.0"
+  },
+  "build": {
+    "appId": "kr.kro.pmhstudio.filtering",
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "publisherName": "PMH Studio / PMH"
+    }
+  }
+}
