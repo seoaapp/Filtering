@@ -13,6 +13,7 @@ const markup = require('chalk')
 
 /** Rest API Module */
 const express = require('express')
+const cors = require('cors')
 
 /** Dialogflow Module */
 process.env.GOOGLE_APPLICATION_CREDENTIALS = './lib/BadWordsFilter-e34ed9d4dd5b.json'
@@ -33,6 +34,7 @@ const dialogflowClient = new dialogflow.SessionsClient()
 
 /** Rest API Router */
 const app = express()
+app.use(cors())
 
 /** Bad Words DataBase */
 const DB = require('../../../public/BadWords.json')

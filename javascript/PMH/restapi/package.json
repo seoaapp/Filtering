@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "chalk": "^2.4.2",
+    "cors": "^2.8.5",
     "dialogflow": "^0.10.1",
     "express": "^4.17.1",
     "hangul-js": "^0.2.5",

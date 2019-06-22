@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html >
+<head>
+  <meta charset="UTF-8">
+  <title>Proj-Filtering</title>
+  
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/5.0.0/normalize.min.css">
+
+  <link rel='stylesheet prefetch' href='https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css'>
+
+      <link rel="stylesheet" href="css/style.css">
+
+  
+</head>
+
+<body>
+  <div class="container">
+  
+  <div class="demo-flex-spacer"></div>
+
+  <div class="webflow-style-input">
+    <input id="input" type="text" placeholder="여기를 눌러 문장 입력"></input>
+    <button id="btn" onclick="exec()"><i class="icon ion-android-arrow-forward"></i></button>
+  </div>
+
+  <div class="demo-flex-spacer"></div>
+  <h1 class="demo">Proj-Filtering</h1>
+  <a class="demo" href="https://github.com/ttakkku/Filtering" title="Github Repo">Github Repo (private)</a>
+
+</div>
+
+<script>
+function exec () {
+  document.getElementById('btn').disabled = true
+  document.getElementById('input').disabled = true
+  let query = encodeURI(document.getElementById('input').value)
+  if (query.length > 0) {
+    var xhr = new XMLHttpRequest()
+      var target = 'http://pmh.dps0340.xyz:8080/check/' + query
+      xhr.open('GET', target)
+      xhr.send()
+
+      xhr.onreadystatechange = function() {
+        if (xhr.readyState === XMLHttpRequest.DONE){
+          if (xhr.status == 200){
+            let res = JSON.parse(xhr.responseText)
+            if (res.result) {
+              document.getElementsByClassName('container')[0].style.backgroundColor = '#df6363'
+              document.getElementById('input').value = ''
+              setTimeout(() => {
+                document.getElementsByClassName('container')[0].style.backgroundColor = '#252736'
+                document.getElementById('btn').disabled = false
+                document.getElementById('input').disabled = false
+              }, 1000)
+            } else {
+              document.getElementsByClassName('container')[0].style.backgroundColor = '#59FF9E'
+              document.getElementById('input').value = ''
+              setTimeout(() => {
+                document.getElementsByClassName('container')[0].style.backgroundColor = '#252736'
+                document.getElementById('btn').disabled = false
+                document.getElementById('input').disabled = false
+              }, 1000)
+            }
+          } else {
+            alert('Server Is Down')
+          }
+        } else {
+          alert('Server Is Down')
+        }
+      }
+
+  } else {
+    document.getElementById('btn').disabled = false
+    document.getElementById('input').disabled = false
+  }
+}
+</script>
+
+</body>
+</html>
