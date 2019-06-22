@@ -89,32 +89,36 @@ console.log(markup.hex('#7289DA').bold('Application is Booted! App on at http://
  * @param {function(boolean)} cb 욕설 여/부 콜백
  */
 function check (query, cb) {
-  console.log(markup.yellow.underline('PROCESS') + ' ' + markup.yellow(dialogflowId) + ': ' + markup.red(query))
-  let dialogflowPath = dialogflowClient.sessionPath(dialogflowId, nanoid())
-
-  let dialogflowRequest = {
-    session: dialogflowPath,
-    queryInput: {
-      text: {
-        text: query,
-        languageCode: 'ko-KR'
+  if (query.length > 0) {
+    console.log(markup.yellow.underline('PROCESS') + ' ' + markup.yellow(dialogflowId) + ': ' + markup.red(query))
+    let dialogflowPath = dialogflowClient.sessionPath(dialogflowId, nanoid())
+  
+    let dialogflowRequest = {
+      session: dialogflowPath,
+      queryInput: {
+        text: {
+          text: query,
+          languageCode: 'ko-KR'
+        }
       }
     }
+  
+    dialogflowClient.detectIntent(dialogflowRequest).then((dialogflowResponse) => {
+      let dialogflowResponseText = dialogflowResponse[0].queryResult.fulfillmentText
+  
+      console.log(markup.magenta.underline('COMPLETE') + ' ' + markup.magenta(dialogflowResponseText))
+      
+      if (dialogflowResponseText.startsWith('badword: ')) {
+        if (eval(dialogflowResponseText.split(' ')[1]) === true) {
+          cb(true)
+        } else {
+          cb(false)
+        }
+      }
+    })
+  } else {
+    cb(false)
   }
-
-  dialogflowClient.detectIntent(dialogflowRequest).then((dialogflowResponse) => {
-    let dialogflowResponseText = dialogflowResponse[0].queryResult.fulfillmentText
-
-    console.log(markup.magenta.underline('COMPLETE') + ' ' + markup.magenta(dialogflowResponseText))
-    
-    if (dialogflowResponseText.startsWith('badword: ')) {
-      if (eval(dialogflowResponseText.split(' ')[1]) === true) {
-        cb(true)
-      } else {
-        cb(false)
-      }
-    }
-  })
 }
 
 function proc (query, cb) {
