@@ -30,6 +30,8 @@
 </div>
 
 <script>
+window.onkeydown = () => { if (event.keyCode === 13) exec() }
+
 function exec () {
   document.getElementById('btn').disabled = true
   document.getElementById('input').disabled = true
@@ -61,11 +63,7 @@ function exec () {
                 document.getElementById('input').disabled = false
               }, 1000)
             }
-          } else {
-            alert('Server Is Down')
           }
-        } else {
-          alert('Server Is Down')
         }
       }
 
