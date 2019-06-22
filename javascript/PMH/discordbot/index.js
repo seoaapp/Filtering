@@ -27,7 +27,7 @@ bwt.on('message', (msg) => {
     superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
       let emb = new discord.RichEmbed()
         .setAuthor(msg.author.username, msg.author.displayAvatarURL)
-        .setColor(res.body.result ? 0x00ff00 : 0xff0000)
+        .setColor(res.body.result ? 0xff0000: 0x00ff00)
         .setTitle('욕설여부: ' + (res.body.result ? '예' : '아니오'))
         .setDescription('만약, 이 봇이 틀렸다면 PMH Studio / PMH#7086 를 불러주세요, 아직 배우는 단계라 잘 모를꺼에요')
       msg.channel.send(emb)
