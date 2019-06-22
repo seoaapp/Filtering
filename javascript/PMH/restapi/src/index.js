@@ -37,7 +37,7 @@ const app = express()
 app.use(cors())
 
 /** Bad Words DataBase */
-const DB = require('../../../public/BadWords.json')
+const DB = require('../../../../public/BadWords.json')
 
 /** Memory */
 let temp = {}
