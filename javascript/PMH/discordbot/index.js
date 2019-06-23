@@ -26,11 +26,53 @@ bwt.on('message', (msg) => {
     if (msg.content.endsWith('#detail')) {
       let query = encodeURI(msg.content)
       superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
-        msg.channel.send(new discord.RichEmbed().setAuthor(msg.author.username, msg.author.displayAvatarURL).setColor(res.body.result ? 0xff0000: 0x00ff00).setTitle(msg.content + ', 욕설여부: ' + (res.body.result ? '예' : '아니오')))
-        msg.channel.send('Request Query: \n' + res.body.query + '\nPre-Process: \n' + JSON.stringify(res.body.process.preProcess))
-        msg.channel.send((!res.body.process['KR-P1'] ? 'EN-P1': 'KR-P1') + '\n' + (!res.body.process['KR-P1'] ? JSON.stringify(res.body.process['EN-P1']) : JSON.stringify(res.body.process['KR-P1'])))
-        if (res.body.process['KR-P2'] || res.body.process['EN-P2']) msg.channel.send((!res.body.process['KR-P2'] ? 'EN-P2': 'KR-P2') + '\n' + (!res.body.process['KR-P2'] ? JSON.stringify(res.body.process['EN-P2']) : JSON.stringify(res.body.process['KR-P2'])))
-        if (res.body.process['KR-P3'] || res.body.process['EN-P3']) msg.channel.send((!res.body.process['KR-P3'] ? 'EN-P3': 'KR-P3') + '\n' + (!res.body.process['KR-P3'] ? JSON.stringify(res.body.process['EN-P3']) : JSON.stringify(res.body.process['KR-P3'])))
+        msg.channel.send('입력된 원본 문장은 **' + res.body.query + '** 입니다\n\n이 문장은 **' + (res.body.process.preProcess.isHangul ? '한글** 이기 때문에 KR-P를 사용합니다' : '영어** 이기 때문에 EN-P를 사용합니다'))
+        if (res.body.process.preProcess.isHangul) {
+          // 한글
+          msg.channel.send('KR-P1:---------------\n입력된 원본 문장 **' + res.body.process['KR-P1'].dialogflow.input + '**를 Dialogflow에 전송하였습니다...\n응답이 ' + (res.body.process['KR-P1'].dialogflow.output ? '**true** 이므로 작업을 종료합니다' : '**false** 이므로 다음 작업(KR-P2)을 실행합니다'))
+          if (res.body.process['KR-P2']) {
+            let temp = 'KR-P2:---------------\n입력된 원본 문장 중...\n-\n'
+            res.body.process['KR-P2'].unicodeCheck.forEach((v, i) => {
+              temp += (i + 1) + '번째 글자 "' + v.character + '" 는 ' + (v.isHangul ? '**한글**이므로 보류합니다' : '**한글이 아니**므로 제거합니다') + '\n'
+            })
+            msg.channel.send(temp)
+            msg.channel.send('-\n이 작업으로 만들어진 문장(**' + res.body.process['KR-P2'].dialogflow.input + '**)를 Dialogflow에 전송하였습니다...\n응답이 ' + (res.body.process['KR-P2'].dialogflow.output ? '**true** 이므로 작업을 종료합니다' : '**false** 이므로 다음 작업(KR-P3)을 실행합니다'))
+          }
+
+          if (res.body.process['KR-P3']) {
+            let temp = 'KR-P3:---------------\nKR-P2로 만들어진 문장을 초성, 중성, 종성으로 분리하면, **"' + res.body.process['KR-P3'].disassembleHangul.join(', ') + '"** 입니다. 이 배열 중...\n-\n'
+            res.body.process['KR-P3'].hanYongKey.forEach((v, i) => {
+              temp += (i + 1) + '번째 글자 "' + v.targetChar + '" 는 한글 자판의 ' + v.HangulIndexOf + '번째 이고, 한영키를 누르면 **'  + v.resultChar + '**입니다\n'
+            })
+            msg.channel.send(temp)
+            msg.channel.send('-\n이 작업으로 만들어진 문장(**' + res.body.process['KR-P3'].dialogflow.input + '**)를 Dialogflow에 전송하였습니다...\n응답은 **' + res.body.process['KR-P3'].dialogflow.output + '**입니다 모든 작업이 완료되었으므로 종료합니다')
+          }
+        } else {
+          // 영어
+          msg.channel.send('EN-P1:---------------\n입력된 원본 문장 **' + res.body.process['EN-P1'].dialogflow.input + '**를 Dialogflow에 전송하였습니다...\n응답이 ' + (res.body.process['EN-P1'].dialogflow.output ? '**true** 이므로 작업을 종료합니다' : '**false** 이므로 다음 작업(EN-P2)을 실행합니다'))
+          if (res.body.process['EN-P2']) {
+            let temp = 'EN-P2:---------------\n입력된 원본 문장 중...\n-\n'
+            res.body.process['EN-P2'].unicodeCheck.forEach((v, i) => {
+              temp += (i + 1) + '번째 글자 "' + v.character + '" 는 ' + (v.isAlphabet ? '**알파벳**이므로 보류합니다' : '**알파벳이 아니**므로 제거합니다') + '\n'
+            })
+            msg.channel.send(temp)
+            msg.channel.send('-\n이 작업으로 만들어진 문장(**' + res.body.process['EN-P2'].dialogflow.input + '**)를 Dialogflow에 전송하였습니다...\n응답이 ' + (res.body.process['EN-P2'].dialogflow.output ? '**true** 이므로 작업을 종료합니다' : '**false** 이므로 다음 작업(EN-P3)을 실행합니다'))
+          }
+
+          if (res.body.process['EN-P3']) {
+            let temp = 'EN-P3:---------------\nEN-P2로 만들어진 문장 중...\n-\n'
+            res.body.process['EN-P3'].hanYongKey.forEach((v, i) => {
+              if (v === 'Not Registered') {
+                temp += (i + 1) + '번째 글자는 처리할 필요가 없으므로 제거합니다\n'
+              } else {
+                temp += (i + 1) + '번째 글자 "' + v.targetChar + '" 는 한글 자판의 ' + v.AlphabetIndexOf + '번째 이고, 한영키를 누르면 **'  + v.resultChar + '**입니다\n'
+              }
+            })
+            msg.channel.send(temp)
+            msg.channel.send('-\n이 작업으로 만들어진 문장(**' + res.body.process['EN-P3'].dialogflow.input + '**)를 Dialogflow에 전송하였습니다...\n응답은 **' + res.body.process['EN-P3'].dialogflow.output + '**입니다 모든 작업이 완료되었으므로 종료합니다')
+          }
+        }
+        msg.channel.send(new discord.RichEmbed().setAuthor(msg.author.username, msg.author.displayAvatarURL).setColor(res.body.result ? 0xff0000: 0x00ff00).setTitle(res.body.query + ', 욕설여부: ' + (res.body.result ? '예' : '아니오')).setDescription('만약, 이 봇이 틀렸다면 PMH Studio / PMH#7086 를 불러주세요, 아직 배우는 단계라 잘 모를꺼에요'))
       })
     } else {
       let query = encodeURI(msg.content)

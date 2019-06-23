@@ -239,6 +239,10 @@ function proc (query, cb) {
             })
             toKor = hangul.assemble(toKor)
             check(toKor, (third) => {
+              temp.process['EN-P3'].dialogflow = {
+                input: toKor,
+                output: third
+              }
               if (third) {
                 cb(true)
               } else {
