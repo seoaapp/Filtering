@@ -27,10 +27,10 @@ bwt.on('message', (msg) => {
       let query = encodeURI(msg.content)
       superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
         msg.channel.send(new discord.RichEmbed().setAuthor(msg.author.username, msg.author.displayAvatarURL).setColor(res.body.result ? 0xff0000: 0x00ff00).setTitle(msg.content + ', 욕설여부: ' + (res.body.result ? '예' : '아니오')))
-        msg.channel.send('Request Query: \n' + res.body.query + '\nPre-Process: \n' + JSON.stringify(res.body.preProcess))
-        msg.channel.send(!res.body.process['KR-P1'] ? 'EN-P1': 'KR-P1' + '\n') + (!res.body.process['KR-P1'] ? JSON.stringify(res.body.process['EN-P1']) : JSON.stringify(res.body.process['KR-P1']))
-        if (res.body.process['KR-P2'] || res.body.process['EN-P2']) msg.channel.send(!res.body.process['KR-P2'] ? 'EN-P2': 'KR-P2' + '\n') + (!res.body.process['KR-P2'] ? JSON.stringify(res.body.process['EN-P2']) : JSON.stringify(res.body.process['KR-P2']))
-        if (res.body.process['KR-P3'] || res.body.process['EN-P3']) msg.channel.send(!res.body.process['KR-P3'] ? 'EN-P3': 'KR-P3' + '\n') + (!res.body.process['KR-P3'] ? JSON.stringify(res.body.process['EN-P3']) : JSON.stringify(res.body.process['KR-P3']))
+        msg.channel.send('Request Query: \n' + res.body.query + '\nPre-Process: \n' + JSON.stringify(res.body.process.preProcess))
+        msg.channel.send((!res.body.process['KR-P1'] ? 'EN-P1': 'KR-P1') + '\n' + (!res.body.process['KR-P1'] ? JSON.stringify(res.body.process['EN-P1']) : JSON.stringify(res.body.process['KR-P1'])))
+        if (res.body.process['KR-P2'] || res.body.process['EN-P2']) msg.channel.send((!res.body.process['KR-P2'] ? 'EN-P2': 'KR-P2') + '\n' + (!res.body.process['KR-P2'] ? JSON.stringify(res.body.process['EN-P2']) : JSON.stringify(res.body.process['KR-P2'])))
+        if (res.body.process['KR-P3'] || res.body.process['EN-P3']) msg.channel.send((!res.body.process['KR-P3'] ? 'EN-P3': 'KR-P3') + '\n' + (!res.body.process['KR-P3'] ? JSON.stringify(res.body.process['EN-P3']) : JSON.stringify(res.body.process['KR-P3'])))
       })
     } else {
       let query = encodeURI(msg.content)
