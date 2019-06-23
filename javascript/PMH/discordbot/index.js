@@ -23,7 +23,7 @@ bwt.on('ready', () => {
 bwt.on('message', (msg) => {
   if (msg.author.id === bwt.user.id) return
   if (msg.channel.id === '587089174331523075' || !msg.guild) {
-    if (nu.content.endsWith('#detail')) {
+    if (msg.content.endsWith('#detail')) {
       let query = encodeURI(msg.content)
       superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
         let emb = new discord.RichEmbed()
