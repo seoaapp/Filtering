@@ -27,7 +27,7 @@ const nanoid = require('nanoid')
 const hangul = require('hangul-js')
 
 /** English Module */
-const isEnglish = require('is-alphabetical')
+const isAlphabet = require('is-alphabetical')
 
 /** Dialogflow Client */
 const dialogflowClient = new dialogflow.SessionsClient()
@@ -59,6 +59,18 @@ app.get('/stop', (req, res) => {
   process.exit()
 })
 
+app.get('/check', (req, res) => {
+  console.log(markup.cyan.underline('REQUEST') + ' ' + markup.cyan(req.ip + ' ' + req.protocol + ' ' + req.path))
+  temp = {
+    name: 'FilteringAPI',
+    description: '이 API는 웹 전용 REST API입니다',
+    사용법: '/check/<문장>',
+    종료하려면: '/stop/'
+  }
+  res.send(temp)
+  console.log(markup.green.underline('RESPONSE') + ' ' + markup.green(JSON.stringify(temp)))
+})
+
 app.get('/check/:query', (req, res) => {
   console.log(markup.cyan.underline('REQUEST') + ' ' + markup.cyan(req.ip + ' ' + req.protocol + ' ' + req.path))
 
@@ -66,15 +78,14 @@ app.get('/check/:query', (req, res) => {
   let query = req.params.query
   let queryArr = query.split(' ')
 
-  proc(query, (result) => {
-    temp = {
-      query: {
-        sentense: query,
-        length: query.length,
-        splitBySpace: queryArr
-      },
-      result: result
+  temp = {
+    query: query,
+    process: {
+
     }
+  }
+  proc(query, (result) => {
+    temp.result = result
     res.send(temp)
     console.log(markup.gray('---------\n') + markup.green.underline('RESPONSE') + ' ' + markup.green(JSON.stringify(temp)))
   })
@@ -130,32 +141,53 @@ function proc (query, cb) {
       isHangul = true
     }
   })
+  temp.process.preProcess = {
+    isHangul: isHangul
+  }
   if (isHangul) {
+    temp.process['KR-P1'] = { }
     console.log(markup.gray('---------KR-P1'))
     check(query, (first) => {
+      temp.process['KR-P1'].dialogflow = {
+        input: query,
+        output: first
+      }
       if (first) {
         cb(true)
       } else {
+        temp.process['KR-P2'] = { unicodeCheck: [] }
         console.log(markup.gray('---------KR-P2'))
         let onlyKorean = ''
         query.split('').forEach((v, i) => {
           if (hangul.isHangul(v)) {
             onlyKorean += v
           }
+          temp.process['KR-P2'].unicodeCheck[i] = { character: v, isHangul: hangul.isHangul(v), fullSentence: onlyKorean }
         })
         check(onlyKorean, (second) => {
+          temp.process['KR-P2'].dialogflow = {
+            input: onlyKorean,
+            output: second
+          }
           if (second) {
             cb(true)
           } else {
+            temp.process['KR-P3'] = { disassembleHangul: [], hanYongKey: [] }
             console.log(markup.gray('---------KR-P3'))
             let hangulArr = hangul.disassemble(onlyKorean)
+            temp.process['KR-P3'].disassembleHangul = hangulArr
             let toEng = ''
             hangulArr.forEach((v, i) => {
               if (DB.hanYongKey.koreans.includes(v)) {
                 toEng += DB.hanYongKey.englishs[DB.hanYongKey.koreans.indexOf(v)]
+                temp.process['KR-P3'].hanYongKey[i] = { targetChar: v, HangulIndexOf: DB.hanYongKey.koreans.indexOf(v), resultChar: DB.hanYongKey.englishs[DB.hanYongKey.koreans.indexOf(v)], fullSentence: toEng }
               }
             })
             check(toEng, (third) => {
+              temp.process['KR-P3'].dialogflow = {
+                input: toEng,
+                output: third
+              }
               if (third) {
                 cb(true)
               } else {
@@ -167,27 +199,42 @@ function proc (query, cb) {
       }
     })
   } else {
+    temp.process['EN-P1'] = { }
     console.log(markup.gray('---------EN-P1'))
     check(query, (first) => {
+      temp.process['EN-P1'].dialogflow = {
+        input: query,
+        output: first
+      }
       if (first) {
         cb(true)
       } else {
+        temp.process['EN-P2'] = { unicodeCheck: [] }
         console.log(markup.gray('---------EN-P2'))
         let onlyEnglish = ''
-        query.split('').forEach((v) => {
-          if (isEnglish(v)) {
+        query.split('').forEach((v, i) => {
+          if (isAlphabet(v)) {
             onlyEnglish += v
           }
+          temp.process['EN-P2'].unicodeCheck[i] = { character: v, isAlphabet: isAlphabet(v), fullSentence: onlyEnglish }
         })
         check(onlyEnglish, (second) => {
+          temp.process['EN-P2'].dialogflow = {
+            input: onlyEnglish,
+            output: second
+          }
           if (second) {
             cb(true)
           } else {
+            temp.process['EN-P3'] = { hanYongKey: [] }
             console.log(markup.gray('---------EN-P3'))
             let toKor = ''
-            onlyEnglish.split('').forEach((v) => {
+            onlyEnglish.split('').forEach((v, i) => {
               if (DB.hanYongKey.englishs.includes(v)) {
                 toKor +=  DB.hanYongKey.koreans[DB.hanYongKey.englishs.indexOf(v)]
+                temp.process['EN-P3'].hanYongKey[i] = { targetChar: v, AlphabetIndexOf: DB.hanYongKey.englishs.indexOf(v), resultChar: DB.hanYongKey.koreans[DB.hanYongKey.englishs.indexOf(v)], fullSentence: toKor }
+              } else {
+                temp.process['EN-P3'].hanYongKey[i] = 'Not Registered'
               }
             })
             toKor = hangul.assemble(toKor)
