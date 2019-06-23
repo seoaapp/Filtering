@@ -28,9 +28,25 @@ bwt.on('message', (msg) => {
       let emb = new discord.RichEmbed()
         .setAuthor(msg.author.username, msg.author.displayAvatarURL)
         .setColor(res.body.result ? 0xff0000: 0x00ff00)
-        .setTitle('욕설여부: ' + (res.body.result ? '예' : '아니오'))
+        .setTitle(msg.content + ', 욕설여부: ' + (res.body.result ? '예' : '아니오'))
         .setDescription('만약, 이 봇이 틀렸다면 PMH Studio / PMH#7086 를 불러주세요, 아직 배우는 단계라 잘 모를꺼에요')
       msg.channel.send(emb)
+    }).catch((err) => console.error(err))
+  }
+})
+
+bwt.on('messageUpdate', (old, nu) => {
+  if (old.content === nu.content) return
+  if (nu.author.id === bwt.user.id) return
+  if (nu.channel.id === '587089174331523075' || !nu.guild) {
+    let query = encodeURI(nu.content)
+    superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
+      let emb = new discord.RichEmbed()
+        .setAuthor(nu.author.username, nu.author.displayAvatarURL)
+        .setColor(res.body.result ? 0xff0000: 0x00ff00)
+        .setTitle(nu.content + ', 욕설여부: ' + (res.body.result ? '예' : '아니오'))
+        .setDescription('만약, 이 봇이 틀렸다면 PMH Studio / PMH#7086 를 불러주세요, 아직 배우는 단계라 잘 모를꺼에요')
+      nu.channel.send(emb)
     }).catch((err) => console.error(err))
   }
 })
