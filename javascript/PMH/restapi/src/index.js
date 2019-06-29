@@ -6,7 +6,7 @@
 'use strict' // 엄격모드
 
 /** Application Port */
-const PORT = 8080
+const PORT = 5000
 
 /** Loging Module */
 const markup = require('chalk')
@@ -20,8 +20,8 @@ process.env.GOOGLE_APPLICATION_CREDENTIALS = './lib/BadWordsFilter-e34ed9d4dd5b.
 const dialogflowId = 'badwordsfilter-esqgxe'
 const dialogflow = require('dialogflow')
 
-/** Nano ID Module */
-const nanoid = require('nanoid')
+/** UUID Module */
+const uuid = require('uuid/v4')
 
 /** Hangul Module */
 const hangul = require('hangul-js')
@@ -31,6 +31,9 @@ const isAlphabet = require('is-alphabetical')
 
 /** Dialogflow Client */
 const dialogflowClient = new dialogflow.SessionsClient()
+
+/** Dialogflow Intent Client */
+const dialogIntentsClient = new dialogflow.IntentsClient();
 
 /** Rest API Router */
 const app = express()
@@ -55,7 +58,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/stop', (req, res) => {
-  res.send("정상적으로 종료되었습니다")
+  res.send('정상적으로 종료되었습니다')
   process.exit()
 })
 
@@ -69,6 +72,48 @@ app.get('/check', (req, res) => {
   }
   res.send(temp)
   console.log(markup.green.underline('RESPONSE') + ' ' + markup.green(JSON.stringify(temp)))
+})
+
+app.get('/add/:indicator/:query', (req, res) => {
+  console.log(markup.cyan.underline('REQUEST') + ' ' + markup.cyan(req.ip + ' ' + req.protocol + ' ' + req.path))
+
+  let target = {}
+  dialogIntentsClient.listIntents({intentView: 'INTENT_VIEW_FULL', parent: dialogIntentsClient.projectAgentPath(dialogflowId)}).then((dialogflowResponse) => {
+    dialogflowResponse[0].forEach((v, i) => {
+      if (v.displayName === req.params.indicator) {
+        target = v
+      }
+    })
+
+    req.params.query.split(' ').forEach((v, i) => {
+      let isDuplicate = false
+      target.trainingPhrases.forEach((v1, i1) => {
+        if (v1.parts[0].text === v) isDuplicate = true
+      })
+
+      if (!isDuplicate) {
+        target.trainingPhrases[target.trainingPhrases.length] = {
+          'parts': [{
+            'text': v,
+            'entityType': '',
+            'alias': '',
+            'userDefined': false
+          }],
+          'name': uuid(),
+          'type': 'EXAMPLE',
+          'timesAddedCount': 0
+        }
+      }
+    })
+
+    dialogIntentsClient.updateIntent({intent: target, languageCode: 'ko'}).then(() => {
+      res.sendStatus(200)
+      console.log(markup.green.underline('RESPONSE') + ' ' + markup.green('200 OK'))
+    }).catch((err) => {
+      res.send(err)
+      console.log(markup.green.underline('RESPONSE') + ' ' + markup.green(JSON.stringify(err)))
+    })
+  })
 })
 
 app.get('/check/:query', (req, res) => {
@@ -104,7 +149,7 @@ console.log(markup.hex('#7289DA').bold('Application is Booted! App on at http://
 function check (query, cb) {
   if (query.length > 0) {
     console.log(markup.yellow.underline('PROCESS') + ' ' + markup.yellow(dialogflowId) + ': ' + markup.red(query))
-    let dialogflowPath = dialogflowClient.sessionPath(dialogflowId, nanoid())
+    let dialogflowPath = dialogflowClient.sessionPath(dialogflowId, uuid())
   
     let dialogflowRequest = {
       session: dialogflowPath,

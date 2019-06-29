@@ -17,7 +17,7 @@
     "express": "^4.17.1",
     "hangul-js": "^0.2.5",
     "is-alphabetical": "^1.0.3",
-    "nanoid": "^2.0.3"
+    "uuid": "^3.3.2"
   },
   "devDependencies": {
     "pkg": "^4.4.0"
