@@ -6,7 +6,7 @@
 'use strict' // 엄격모드
 
 /** Application Port */
-const PORT = 5000
+const PORT = 8080
 
 /** Loging Module */
 const markup = require('chalk')
