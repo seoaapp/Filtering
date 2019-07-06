@@ -100,6 +100,13 @@ bwt.on('message', (msg) => {
         msg.channel.send(emb)
       }).catch((err) => console.error(err))
     }
+  } else if (msg.channel.id === '587096044177719296') {
+    if (msg.content.startsWith('#')) return
+    let query = encodeURI(msg.content)
+    superagent.get('http://pmh.dps0340.xyz:8080/add/badword/' + query).then((res) => {
+      if (res.body === 'OK') msg.channel.send(query + '가 욕설로 추가되었습니다')
+      else msg.channel.send('오류 발생! : ' + JSON.stringify(res.body))
+    })
   }
 })
 
