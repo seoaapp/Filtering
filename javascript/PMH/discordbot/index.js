@@ -28,16 +28,12 @@ bwt.on('message', (msg) => {
       let query = encodeURI(msg.content.split('#욕설로추가').join(''))
       if (!query) return msg.channel.send('#욕설로추가 사용법\n욕설을 띄워쓰기로 나눠 적은뒤 뒤에 \'#욕설로추가\' 만 입력하세요\nex) ㅅㅂ ㅅ1ㅂ ㅄ ㅂㅅ ㅂ1ㅅ#욕설로추가')
       superagent.get('http://pmh.dps0340.xyz:8080/add/badword/' + query).then((res) => {
-        if (res.body === 'OK') msg.channel.send('패치완료!')
-        else msg.channel.send('오류 발생! : ' + JSON.stringify(res.body))
-      })
+        msg.channel.send('패치완료!') })
     } else if (msg.content.endsWith('#욕설이아님')) {
       let query = encodeURI(msg.content.split('#욕설이아님').join(''))
       if (!query) return msg.channel.send('#욕설이아님 사용법\n욕설을 띄워쓰기로 나눠 적은뒤 뒤에 \'#욕설이아님\' 만 입력하세요\nex) 안녕하세요 안녕 반가워요#욕설이아님')
       superagent.get('http://pmh.dps0340.xyz:8080/add/fineword/' + query).then((res) => {
-        if (res.body === 'OK') msg.channel.send('패치완료!')
-        else msg.channel.send('오류 발생! : ' + JSON.stringify(res.body))
-      })
+        msg.channel.send('패치완료!') })
     } else if (msg.content.endsWith('#detail') || msg.content.endsWith('#더보기')) {
       let query = encodeURI(msg.content)
       superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
