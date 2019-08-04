@@ -50,6 +50,6 @@ Proj-Fitering -- License & Readme.md & .gitgnore
 
 [![Collaborators count](https://img.shields.io/github/contributors/ttakkku/Filtering)](https://github.com/ttakkku/Filtering/graphs/contributors)
 
-# Discord Support Guild
+<!-- # Discord Support Guild
 
-[![Proj-Filtering 공동 작업소](https://discordapp.com/api/guilds/586933011182911529/embed.png?style=banner2)](https://discord.gg/hwRgVYA)
+<!-- [![Proj-Filtering 공동 작업소](https://discordapp.com/api/guilds/586933011182911529/embed.png?style=banner2)](https://discord.gg/hwRgVYA) -->
