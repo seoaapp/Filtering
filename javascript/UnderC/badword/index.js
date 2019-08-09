@@ -27,8 +27,7 @@ const test = async (query) => {
     let disaQuery = hangul.d(pureQuery)
     let reverse = temp.isKr || temp.isEn ? (conv(disaQuery, temp.isKr ? true : false)) : disaQuery
     reverse = temp.isEn ? hangul.a(reverse) : reverse
-    temp.p[mode][2] = { disaQuery: disaQuery, query: reverse, result: await check(reverse) }
-    console.log(temp)
+    temp.p[mode][2] = { disaQuery: disaQuery, query: reverse, result: await check(reverse, temp.isEn) }
     if (temp.p[mode][2].result) {
         temp.res = true
     }
@@ -40,12 +39,12 @@ const conv = (query, toEn) => {
     if (!query) return res
     query.forEach(val => {
         let index = config[toEn ? 'kr' : 'en'].indexOf(val)
-        res += config[toEn ? 'en' : 'kr'][index]
+        res += index >= 0 ? config[toEn ? 'en' : 'kr'][index] : val
     })
     return res
 }
 
-const check = async (query) => {
+const check = async (query, isEn) => {
     query = Array.isArray(query) ? query.join() : query
     let bads = await db.select('badwords')
     let bRegex = JSON.stringify(bads).split('"').join('').split(',').join('|').split('{v:').join('').split('}').join('').replace('[', '').replace(']', '')
@@ -53,6 +52,7 @@ const check = async (query) => {
     
     let fines = await db.select('finewords')
     let fRegex = JSON.stringify(fines).split('"').join('').split(',').join('|').split('{v:').join('').split('}').join('').replace('[', '').replace(']', '')
+    if (isEn) fRegex = hangul.a(conv(hangul.d(fRegex), !isEn))
     let fTemp = query.match(fRegex) || []
 
     if (bTemp.length < 1) return false
@@ -61,6 +61,7 @@ const check = async (query) => {
             let temp = val.match(bRegex)
             if (temp) bTemp.splice(bTemp.indexOf(temp[0]), 1)
         })
+
         if (bTemp.length < 1) return false
         return bTemp
     }
@@ -74,7 +75,6 @@ svc.on('ready', () => {
 
 svc.on('message', async msg => {
     if (msg.author.bot) return
-    console.log(msg.channel.id)
     if (msg.content.startsWith(config.prefix)) {
 
     } else {
@@ -87,7 +87,8 @@ svc.on('message', async msg => {
             if (await db.select('badwords', { v: msg.content })[0]) return
             db.insert('finewords', { v: msg.content })
         } else if (msg.channel.id === '609309970852347904' || msg.channel.id === '544141125607227402') {
-            msg.channel.send(JSON.stringify(await test(msg.content)))
+            let r = await test(msg.content)
+            msg.channel.send(JSON.stringify(r))
         }
     }
 })
