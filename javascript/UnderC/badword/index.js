@@ -2,7 +2,7 @@
 const discord = require('discord.js')
 const hangul = require('hangul-js')
 const isAlphabet = require('is-alphabetical')
-const DB = require('./db')
+const DB = require('umysql')
 const config = require('./config.json')
 
 const svc = new discord.Client()
