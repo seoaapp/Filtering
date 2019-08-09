@@ -22,7 +22,7 @@ bwt.on('ready', () => {
 
 bwt.on('message', (msg) => {
   if (msg.author.id === bwt.user.id) return
-  if (msg.channel.id === '587089174331523075' || !msg.guild) {
+  if (msg.channel.id === '607554417524473875' || !msg.guild) {
     if (msg.content.startsWith('#')) return
     if (msg.content.endsWith('#욕설로추가')) {
       let query = encodeURI(msg.content.split('#욕설로추가').join(''))
@@ -96,12 +96,11 @@ bwt.on('message', (msg) => {
         msg.channel.send(emb)
       }).catch((err) => console.error(err))
     }
-  } else if (msg.channel.id === '587096044177719296') {
+  } else if (msg.channel.id === '607584096809517061') {
     if (msg.content.startsWith('#')) return
     let query = encodeURI(msg.content)
     superagent.get('http://pmh.dps0340.xyz:8080/add/badword/' + query).then((res) => {
-      if (res.body === 'OK') msg.channel.send(query + '가 욕설로 추가되었습니다')
-      else msg.channel.send('오류 발생! : ' + JSON.stringify(res.body))
+      msg.channel.send(query + '가 욕설로 추가되었습니다')
     })
   }
 })
@@ -109,7 +108,7 @@ bwt.on('message', (msg) => {
 bwt.on('messageUpdate', (old, nu) => {
   if (old.content === nu.content) return
   if (nu.author.id === bwt.user.id) return
-  if (nu.channel.id === '587089174331523075' || !nu.guild) {
+  if (nu.channel.id === '607554417524473875' || !nu.guild) {
     if (nu.content.endsWith('#detail') || nu.content.endsWith('#더보기')) {
       let query = encodeURI(nu.content)
       superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {

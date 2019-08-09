@@ -19,33 +19,6 @@
 
 물론, 디버그나 git push도 자율로 하실 수 있습니다
 
-# 파일 구조화
-
-<!--
-
-
-Proj-Fitering -- License & Readme.md & .gitgnore 
-               |
-                - Private - Other
-               |
-                - Public 
-
-
--->
-
-> Proj-Filtering
->> javascript
->>> PMH
->>
->> python
->>> hynus
->>
->> public
->>> img
->>
-
-
-
 # Collaborators
 
 [![Collaborators count](https://img.shields.io/github/contributors/ttakkku/Filtering)](https://github.com/ttakkku/Filtering/graphs/contributors)
