@@ -5,6 +5,9 @@
 
 'use strict' // 엄격모드
 
+/** IP Addresses */
+const whiteIP = [ '::1', '127.0.0.1', 'localhost' ]
+
 /** Application Port */
 const PORT = 8080
 
@@ -76,6 +79,10 @@ app.get('/check', (req, res) => {
 
 app.get('/add/:indicator/:query', (req, res) => {
   console.log(markup.cyan.underline('REQUEST') + ' ' + markup.cyan(req.ip + ' ' + req.protocol + ' ' + req.path))
+  if (!whiteIP.includes(req.ip)) {
+    res.sendStatus(403)
+    return console.log(markup.green.underline('RESPONSE') + ' ' + markup.red('403 Forbidden'))
+  }
 
   let target = {}
   dialogIntentsClient.listIntents({intentView: 'INTENT_VIEW_FULL', parent: dialogIntentsClient.projectAgentPath(dialogflowId)}).then((dialogflowResponse) => {
