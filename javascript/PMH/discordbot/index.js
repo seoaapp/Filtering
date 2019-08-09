@@ -102,6 +102,12 @@ bwt.on('message', (msg) => {
     superagent.get('http://pmh.dps0340.xyz:8080/add/badword/' + query).then((res) => {
       msg.channel.send(query + '가 욕설로 추가되었습니다')
     })
+  } else if (msg.channel.id === '609214677527822336') {
+    if (msg.content.startsWith('#')) return
+    let query = encodeURI(msg.content)
+    superagent.get('http://pmh.dps0340.xyz:8080/add/fineword/' + query).then((res) => {
+      msg.channel.send(query + '가 욕설에서 제외되었습니다')
+    })
   }
 })
 
