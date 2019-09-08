@@ -6,7 +6,7 @@
 'use strict' // 엄격모드
 
 /** IP Addresses */
-const whiteIP = [ '::1', '127.0.0.1', 'localhost', '::ffff:207.148.95.242' ]
+const whiteIP = [ '::1', '127.0.0.1', 'localhost', '::ffff:172.17.0.1' ]
 
 /** Application Port */
 const PORT = 8080
