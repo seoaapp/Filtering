@@ -27,16 +27,16 @@ bwt.on('message', (msg) => {
     if (msg.content.endsWith('#욕설로추가')) {
       let query = encodeURI(msg.content.split('#욕설로추가').join(''))
       if (!query) return msg.channel.send('#욕설로추가 사용법\n욕설을 띄워쓰기로 나눠 적은뒤 뒤에 \'#욕설로추가\' 만 입력하세요\nex) ㅅㅂ ㅅ1ㅂ ㅄ ㅂㅅ ㅂ1ㅅ#욕설로추가')
-      superagent.get('http://pmh.dps0340.xyz:8080/add/badword/' + query).then((res) => {
+      superagent.get('http://noeulserver.ddns.net:8080/add/badword/' + query).then((res) => {
         msg.channel.send('패치완료!') })
     } else if (msg.content.endsWith('#욕설이아님')) {
       let query = encodeURI(msg.content.split('#욕설이아님').join(''))
       if (!query) return msg.channel.send('#욕설이아님 사용법\n욕설을 띄워쓰기로 나눠 적은뒤 뒤에 \'#욕설이아님\' 만 입력하세요\nex) 안녕하세요 안녕 반가워요#욕설이아님')
-      superagent.get('http://pmh.dps0340.xyz:8080/add/fineword/' + query).then((res) => {
+      superagent.get('http://noeulserver.ddns.net:8080/add/fineword/' + query).then((res) => {
         msg.channel.send('패치완료!') })
     } else if (msg.content.endsWith('#detail') || msg.content.endsWith('#더보기')) {
       let query = encodeURI(msg.content)
-      superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
+      superagent.get('http://noeulserver.ddns.net:8080/check/' + query).then((res) => {
         msg.channel.send('입력된 원본 문장은 **' + res.body.query + '** 입니다\n\n이 문장은 **' + (res.body.process.preProcess.isHangul ? '한글** 이기 때문에 KR-P를 사용합니다' : '영어** 이기 때문에 EN-P를 사용합니다'))
         if (res.body.process.preProcess.isHangul) {
           // 한글
@@ -87,7 +87,7 @@ bwt.on('message', (msg) => {
       })
     } else {
       let query = encodeURI(msg.content)
-      superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
+      superagent.get('http://noeulserver.ddns.net:8080/check/' + query).then((res) => {
         let emb = new discord.RichEmbed()
           .setAuthor(msg.author.username, msg.author.displayAvatarURL)
           .setColor(res.body.result ? 0xff0000: 0x00ff00)
@@ -99,13 +99,13 @@ bwt.on('message', (msg) => {
   } else if (msg.channel.id === '607584096809517061') {
     if (msg.content.startsWith('#')) return
     let query = encodeURI(msg.content)
-    superagent.get('http://pmh.dps0340.xyz:8080/add/badword/' + query).then((res) => {
+    superagent.get('http://noeulserver.ddns.net:8080/add/badword/' + query).then((res) => {
       msg.channel.send(query + '가 욕설로 추가되었습니다')
     })
   } else if (msg.channel.id === '609214677527822336') {
     if (msg.content.startsWith('#')) return
     let query = encodeURI(msg.content)
-    superagent.get('http://pmh.dps0340.xyz:8080/add/fineword/' + query).then((res) => {
+    superagent.get('http://noeulserver.ddns.net:8080/add/fineword/' + query).then((res) => {
       msg.channel.send(query + '가 욕설에서 제외되었습니다')
     })
   }
@@ -117,7 +117,7 @@ bwt.on('messageUpdate', (old, nu) => {
   if (nu.channel.id === '607554417524473875' || !nu.guild) {
     if (nu.content.endsWith('#detail') || nu.content.endsWith('#더보기')) {
       let query = encodeURI(nu.content)
-      superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
+      superagent.get('http://noeulserver.ddns.net:8080/check/' + query).then((res) => {
         nu.channel.send('입력된 원본 문장은 **' + res.body.query + '** 입니다\n\n이 문장은 **' + (res.body.process.preProcess.isHangul ? '한글** 이기 때문에 KR-P를 사용합니다' : '영어** 이기 때문에 EN-P를 사용합니다'))
         if (res.body.process.preProcess.isHangul) {
           // 한글
@@ -168,7 +168,7 @@ bwt.on('messageUpdate', (old, nu) => {
       })
     } else {
       let query = encodeURI(nu.content)
-      superagent.get('http://pmh.dps0340.xyz:8080/check/' + query).then((res) => {
+      superagent.get('http://noeulserver.ddns.net:8080/check/' + query).then((res) => {
         let emb = new discord.RichEmbed()
           .setAuthor(nu.author.username, nu.author.displayAvatarURL)
           .setColor(res.body.result ? 0xff0000: 0x00ff00)
